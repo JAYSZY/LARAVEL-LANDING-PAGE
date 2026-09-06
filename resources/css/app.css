@@ -50,7 +50,7 @@
 
     /* Hero */
     .hero {
-        @apply relative aspect-[4/5] w-full min-h-[calc(100vh-69px)] overflow-hidden bg-[#0b1530] sm:aspect-[16/9] lg:aspect-[12/5];
+        @apply relative aspect-[4/5] w-full min-h-[calc(100vh-69px)] snap-start scroll-mt-[69px] overflow-hidden bg-[#0b1530] sm:aspect-[16/9] lg:aspect-[12/5];
     }
     .hero__image {
         @apply absolute inset-0 h-full w-full object-cover;
@@ -91,7 +91,7 @@
         @apply mx-auto w-full max-w-7xl px-6 lg:px-8;
     }
     .section-heading {
-        @apply mx-auto mb-10 max-w-2xl text-center;
+        @apply mx-auto mb-6 max-w-2xl text-center;
     }
     .section-heading__title {
         @apply text-3xl font-bold text-[#0b1530];
@@ -100,18 +100,27 @@
         @apply mt-4 text-slate-600;
     }
 
+    /* Wraps everything below the hero. Deliberately matches the hero's
+       min-height formula exactly (both scale with 100vh together) so the
+       scroll-snap target below is always reachable, on any screen size --
+       otherwise a short content block can't be fully separated from a much
+       taller hero, and the hero bleeds through at the seam. */
+    .content-frame {
+        @apply flex min-h-[calc(100vh-69px)] snap-start scroll-mt-[69px] flex-col justify-center;
+    }
+
     /* Feature cards */
     .features {
-        @apply bg-white pb-14 pt-24;
+        @apply bg-white py-6;
     }
     .feature-grid {
-        @apply grid gap-6 sm:grid-cols-2 lg:grid-cols-3;
+        @apply grid gap-4 sm:grid-cols-2 lg:grid-cols-3;
     }
     .card {
-        @apply rounded-2xl border border-slate-200 p-6 shadow-sm transition hover:shadow-md;
+        @apply rounded-2xl border border-slate-200 p-5 shadow-sm transition hover:shadow-md;
     }
     .card__icon {
-        @apply mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-[#0b1530];
+        @apply mb-3 flex h-10 w-10 items-center justify-center rounded-xl bg-[#0b1530];
     }
     .card__title {
         @apply mb-2 text-lg font-semibold text-[#0b1530];
@@ -125,13 +134,13 @@
 
     /* Trust badges */
     .badges {
-        @apply bg-slate-100 py-8;
+        @apply bg-slate-100 py-4;
     }
     .badges__grid {
-        @apply mx-auto grid max-w-4xl grid-cols-1 gap-8 px-6 text-center sm:grid-cols-3 lg:px-8;
+        @apply mx-auto grid max-w-4xl grid-cols-1 gap-6 px-6 text-center sm:grid-cols-3 lg:px-8;
     }
     .badge__icon {
-        @apply mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-[#0b1530]/10;
+        @apply mx-auto mb-2 flex h-10 w-10 items-center justify-center rounded-full bg-[#0b1530]/10;
     }
     .badge__title {
         @apply font-semibold text-[#0b1530];
@@ -143,12 +152,23 @@
         @apply h-6 w-6 text-[#0b1530];
     }
 
+    /* Adoption CTA */
+    .adoption-cta {
+        @apply bg-white px-6 py-4 text-center;
+    }
+    .adoption-cta__text {
+        @apply mx-auto max-w-2xl text-base text-slate-600;
+    }
+    .adoption-cta__link {
+        @apply font-semibold text-[#0b1530] underline decoration-amber-400 decoration-2 underline-offset-4 transition hover:text-amber-600;
+    }
+
     /* Footer */
     .site-footer {
         @apply bg-[#0b1530];
     }
     .site-footer__grid {
-        @apply mx-auto grid max-w-7xl grid-cols-1 gap-8 border-b border-white/10 px-6 py-6 sm:grid-cols-2 lg:grid-cols-4 lg:px-8;
+        @apply mx-auto grid max-w-7xl grid-cols-1 gap-6 border-b border-white/10 px-6 py-4 sm:grid-cols-2 lg:grid-cols-4 lg:px-8;
     }
     .footer-item {
         @apply flex items-start gap-3;
@@ -158,5 +178,47 @@
     }
     .icon-amber-sm {
         @apply mt-0.5 h-5 w-5 shrink-0 text-amber-400;
+    }
+
+    /* Request form page */
+    .request-header {
+        @apply bg-[#0b1530] px-6 py-16 text-center;
+    }
+    .request-header__title {
+        @apply text-3xl font-bold text-white sm:text-4xl;
+    }
+    .request-header__desc {
+        @apply mx-auto mt-4 max-w-xl text-slate-300;
+    }
+    .request-section {
+        @apply bg-slate-50 px-6 py-16;
+    }
+    .form-card {
+        @apply mx-auto max-w-2xl rounded-2xl border border-slate-200 bg-white p-8 shadow-sm;
+    }
+    .form-status {
+        @apply mb-6 rounded-lg border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-700;
+    }
+    .form-row {
+        @apply grid gap-6 sm:grid-cols-2;
+    }
+    .form-group {
+        @apply mb-6;
+    }
+    .form-label {
+        @apply mb-2 block text-sm font-medium text-[#0b1530];
+    }
+    .form-input,
+    .form-textarea {
+        @apply w-full rounded-md border border-slate-300 px-4 py-2.5 text-slate-800 transition focus:border-[#0b1530] focus:outline-none focus:ring-2 focus:ring-[#0b1530]/20;
+    }
+    .form-textarea {
+        @apply resize-none;
+    }
+    .form-error {
+        @apply mt-1.5 text-sm text-red-600;
+    }
+    .btn-primary {
+        @apply w-full rounded-md bg-[#0b1530] px-8 py-3 text-base font-semibold text-white transition hover:bg-[#0b1530]/90 sm:w-auto;
     }
 }
