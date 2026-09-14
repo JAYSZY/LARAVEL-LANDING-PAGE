@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.site')
 
 @section('content')
 
@@ -100,7 +100,7 @@
                 </div>
                 <p class="cta-band__text">
                     Interested in bringing VTrack to your facility? If you're interested,
-                    <a href="{{ route('request.show') }}" class="cta-band__link">submit a request here</a>.
+                    <a href="{{ route('request.create') }}" class="cta-band__link">submit a request here</a>.
                 </p>
             </div>
         </section>

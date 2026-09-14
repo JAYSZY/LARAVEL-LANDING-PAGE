@@ -1,4 +1,5 @@
 @import 'tailwindcss';
+@plugin '@tailwindcss/forms';
 
 @source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
 @source '../../storage/framework/views/*.php';
@@ -6,6 +7,10 @@
 @theme {
     --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
         'Segoe UI Symbol', 'Noto Color Emoji';
+}
+
+[x-cloak] {
+    display: none !important;
 }
 
 @layer components {
@@ -151,6 +156,38 @@
     .icon-amber-sm {
         @apply mt-0.5 h-5 w-5 shrink-0 text-amber-400;
     }
+    .site-footer__bottom {
+        @apply mx-auto flex max-w-7xl flex-col items-center gap-3 px-6 py-4 text-center sm:flex-row sm:justify-between sm:text-left lg:px-8;
+    }
+    .site-footer__copyright {
+        @apply text-xs text-slate-400;
+    }
+    .site-footer__links {
+        @apply flex items-center gap-4;
+    }
+    .site-footer__link {
+        @apply text-xs font-medium text-slate-300 transition hover:text-amber-400;
+    }
+
+    /* Public site navigation */
+    .site-nav {
+        @apply hidden items-center gap-1 md:flex;
+    }
+    .site-nav__link {
+        @apply rounded-md px-3 py-2 text-sm font-medium text-slate-200 transition hover:text-amber-400;
+    }
+    .site-nav__link--active {
+        @apply text-amber-400;
+    }
+    .site-nav__toggle {
+        @apply flex items-center justify-center rounded-md p-2 text-slate-200 hover:text-amber-400 md:hidden;
+    }
+    .site-nav-mobile {
+        @apply flex flex-col gap-1 border-t border-white/10 px-6 py-3 md:hidden;
+    }
+    .site-nav-mobile__link {
+        @apply rounded-md px-2 py-2 text-sm font-medium text-slate-200 transition hover:text-amber-400;
+    }
 
 
     .cta-band {
@@ -218,5 +255,18 @@
     }
     .request-submit {
         @apply w-full rounded-md bg-amber-400 px-8 py-3 text-base font-semibold text-[#0b1530] transition hover:bg-amber-300 sm:w-auto;
+    }
+    .request-error {
+        @apply mt-1 text-xs font-medium text-red-600;
+    }
+    .request-input--invalid,
+    .request-textarea--invalid {
+        @apply border-red-400 focus:border-red-500 focus:ring-red-500/20;
+    }
+    .request-status {
+        @apply mx-auto mb-6 max-w-3xl rounded-md border border-green-200 bg-green-50 px-4 py-3 text-sm font-medium text-green-800;
+    }
+    .request-status--error {
+        @apply border-red-200 bg-red-50 text-red-800;
     }
 }
