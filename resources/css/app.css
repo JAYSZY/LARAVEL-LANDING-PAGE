@@ -269,4 +269,21 @@
     .request-status--error {
         @apply border-red-200 bg-red-50 text-red-800;
     }
+
+    /* Auth pages — login, register, password reset, etc. (resources/views/layouts/guest.blade.php) */
+    .auth-page {
+        @apply flex min-h-screen flex-col items-center justify-center gap-6 bg-slate-100 px-6 py-10;
+    }
+    .auth-page__brand {
+        @apply flex items-center gap-3;
+    }
+    .auth-page__brand-logo {
+        @apply h-12 w-12;
+    }
+    .auth-page__brand-name {
+        @apply text-xl font-bold tracking-wide text-[#0b1530];
+    }
+    .auth-card {
+        @apply w-full max-w-md rounded-2xl border border-t-4 border-slate-200 border-t-amber-400 bg-white p-8 shadow-sm sm:p-10;
+    }
 }
