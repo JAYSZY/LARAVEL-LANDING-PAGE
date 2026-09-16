@@ -1,18 +1,32 @@
 <section class="space-y-6">
-    <header>
-        <h2 class="text-lg font-medium text-gray-900">
-            {{ __('Delete Account') }}
-        </h2>
+    <div class="flex items-start gap-4">
+        <span class="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-red-600">
+            <x-heroicon-s-trash class="h-6 w-6 text-white" />
+        </span>
+        <header>
+            <h2 class="text-lg font-semibold text-gray-900">
+                {{ __('Delete Account') }}
+            </h2>
+        </header>
+    </div>
 
-        <p class="mt-1 text-sm text-gray-600">
-            {{ __('Once your account is deleted, all of its resources and data will be permanently deleted. Before deleting your account, please download any data or information that you wish to retain.') }}
-        </p>
-    </header>
+    <div class="flex items-start gap-3 rounded-lg border border-red-200 bg-red-50 px-4 py-3">
+        <x-heroicon-s-exclamation-circle class="mt-0.5 h-5 w-5 shrink-0 text-red-500" />
+        <div class="text-sm text-red-800">
+            <p class="font-medium">{{ __('Once your account is deleted, all of its resources and data will be permanently deleted.') }}</p>
+            <p class="mt-1 text-red-700">{{ __('Before deleting your account, please download any data or information that you wish to retain.') }}</p>
+        </div>
+    </div>
 
-    <x-danger-button
+    <button
+        type="button"
         x-data=""
         x-on:click.prevent="$dispatch('open-modal', 'confirm-user-deletion')"
-    >{{ __('Delete Account') }}</x-danger-button>
+        class="inline-flex items-center gap-2 rounded-md bg-red-600 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-red-500"
+    >
+        <x-heroicon-s-trash class="h-4 w-4" />
+        {{ __('Delete Account') }}
+    </button>
 
     <x-modal name="confirm-user-deletion" :show="$errors->userDeletion->isNotEmpty()" focusable>
         <form method="post" action="{{ route('profile.destroy') }}" class="p-6">

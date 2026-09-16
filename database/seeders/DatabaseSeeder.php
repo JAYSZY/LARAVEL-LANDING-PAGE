@@ -42,7 +42,7 @@ class DatabaseSeeder extends Seeder
                 'contact_number' => '09182345678',
                 'email' => 'naga.jail@bjmp.gov.ph',
                 'message' => 'Would like a demo before the next quarter.',
-                'status' => 'contacted',
+                'status' => 'reviewing',
             ],
             [
                 'facility_name' => 'Sorsogon District Jail',
@@ -62,7 +62,7 @@ class DatabaseSeeder extends Seeder
                 'contact_number' => '09204567890',
                 'email' => 'masbate.jail@bjmp.gov.ph',
                 'message' => 'Budget approval still pending on our end.',
-                'status' => 'declined',
+                'status' => 'denied',
             ],
         ];
 

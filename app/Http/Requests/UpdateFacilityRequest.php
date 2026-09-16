@@ -22,14 +22,7 @@ class UpdateFacilityRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'facility_name' => ['required', 'string', 'max:255'],
-            'region' => ['required', 'string', 'max:255'],
-            'contact_name' => ['required', 'string', 'max:255'],
-            'position' => ['required', 'string', 'max:255'],
-            'contact_number' => ['required', 'string', 'max:20'],
-            'email' => ['required', 'email', 'max:255'],
-            'message' => ['nullable', 'string', 'max:2000'],
-            'status' => ['required', 'in:pending,contacted,approved,declined'],
+            'status' => ['required', 'in:pending,reviewing,approved,denied'],
             'admin_notes' => ['nullable', 'string', 'max:2000'],
         ];
     }

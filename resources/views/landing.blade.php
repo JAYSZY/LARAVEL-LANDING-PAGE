@@ -1,5 +1,8 @@
 @extends('layouts.site')
 
+@section('title', config('app.name', 'VTrack') . ' - BJMP Virac Visitor Tracking System')
+@section('description', 'VTrack is the secure, offline-ready visitor management system of the Bureau of Jail Management and Penology - Virac District Jail.')
+
 @section('content')
 
         <section class="hero">
@@ -17,7 +20,7 @@
                     <x-heroicon-s-star class="hero__divider-icon" />
                     <span class="hero__divider-line"></span>
                 </div>
-    
+
                 <p class="hero__subtitle">
                     VTrack is an offline-ready system for recording,
                     verifying, and monitoring every visitor who enters the facility.
@@ -31,7 +34,10 @@
             </div>
         </section>
 
-        {{-- FEATURE HIGHLIGHTS --}}
+        {{-- ============================================================
+             FEATURE HIGHLIGHTS
+             Three cards describing what makes VTrack useful at the gate.
+        ============================================================= --}}
         <section id="features" class="features">
             <div class="container-wide">
 
@@ -67,7 +73,11 @@
             </div>
         </section>
 
-        {{-- TRUST BADGES --}}
+        {{-- ============================================================
+             TRUST BADGES
+             Reassurance strip, echoing the "Secure / Encrypted / Offline
+             Ready" badges shown on the VTrack sign-in screen.
+        ============================================================= --}}
         <section class="badges">
             <div class="badges__grid">
 
@@ -82,7 +92,7 @@
                 @foreach ($badges as $badge)
                     <div>
                         <div class="badge__icon">
-                            <x-dynamic-component :component="'heroicon-o-' . $badge['icon']" class="icon-navy" />
+                            <x-dynamic-component :component="'heroicon-o-' . $badge['icon']" class="icon-amber" />
                         </div>
                         <h4 class="badge__title">{{ $badge['label'] }}</h4>
                         <p class="badge__desc">{{ $badge['desc'] }}</p>
@@ -92,15 +102,19 @@
             </div>
         </section>
 
-        {{-- CLOSING--}}
+        {{-- ============================================================
+             CLOSING CTA
+             Text-link invitation for other BJMP facilities/regions to
+             request VTrack for their own use.
+        ============================================================= --}}
         <section class="cta-band">
             <div class="cta-band__inner">
                 <div class="cta-band__icon-wrap">
                     <x-heroicon-o-paper-airplane class="cta-band__icon" />
                 </div>
                 <p class="cta-band__text">
-                    Interested in bringing VTrack to your facility? If you're interested,
-                    <a href="{{ route('request.create') }}" class="cta-band__link">submit a request here</a>.
+                    Interested in bringing VTrack to your facility?
+                    <a href="{{ route('request.create') }}" class="cta-band__link">Submit a request here</a>.
                 </p>
             </div>
         </section>

@@ -4,9 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreFacilityRequest;
 use App\Http\Requests\UpdateFacilityRequest;
+use App\Mail\FacilityRequestDecisionMail;
 use App\Models\FacilityRequest;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\View\View;
 
 class FacilityRequestController extends Controller
@@ -36,8 +39,9 @@ class FacilityRequestController extends Controller
         $stats = [
             'total' => FacilityRequest::count(),
             'pending' => FacilityRequest::where('status', 'pending')->count(),
-            'contacted' => FacilityRequest::where('status', 'contacted')->count(),
+            'reviewing' => FacilityRequest::where('status', 'reviewing')->count(),
             'approved' => FacilityRequest::where('status', 'approved')->count(),
+            'denied' => FacilityRequest::where('status', 'denied')->count(),
         ];
 
         $recentRequests = FacilityRequest::latest()->take(5)->get();
@@ -48,11 +52,29 @@ class FacilityRequestController extends Controller
     /**
      * Display a listing of facility requests (admin, protected).
      */
-    public function index(): View
+    public function index(Request $request): View
     {
-        $facilityRequests = FacilityRequest::latest()->paginate(10);
+        $search = $request->string('search')->trim()->toString();
+        $region = $request->string('region')->toString();
+        $status = $request->string('status')->toString();
 
-        return view('requests.index', compact('facilityRequests'));
+        $facilityRequests = FacilityRequest::query()
+            ->when($search, function ($query, $search) {
+                $query->where(function ($query) use ($search) {
+                    $query->where('facility_name', 'like', "%{$search}%")
+                        ->orWhere('region', 'like', "%{$search}%")
+                        ->orWhere('contact_name', 'like', "%{$search}%");
+                });
+            })
+            ->when($region, fn ($query, $region) => $query->where('region', $region))
+            ->when($status, fn ($query, $status) => $query->where('status', $status))
+            ->latest()
+            ->paginate(10)
+            ->withQueryString();
+
+        $regions = FacilityRequest::query()->distinct()->orderBy('region')->pluck('region');
+
+        return view('requests.index', compact('facilityRequests', 'regions'));
     }
 
     /**
@@ -68,6 +90,8 @@ class FacilityRequestController extends Controller
      */
     public function update(UpdateFacilityRequest $request, FacilityRequest $facilityRequest): RedirectResponse
     {
+        $previousStatus = $facilityRequest->status;
+
         $facilityRequest->update($request->validated());
 
         Log::info('Facility request updated.', [
@@ -76,9 +100,40 @@ class FacilityRequestController extends Controller
             'updated_by' => $request->user()->email,
         ]);
 
+        $decisionJustMade = $previousStatus !== $facilityRequest->status
+            && in_array($facilityRequest->status, ['approved', 'denied']);
+
+        $emailSent = false;
+
+        if ($decisionJustMade) {
+            try {
+                Mail::to($facilityRequest->email)->send(new FacilityRequestDecisionMail($facilityRequest));
+
+                Log::info('Facility request decision email sent.', [
+                    'facility_request_id' => $facilityRequest->id,
+                    'status' => $facilityRequest->status,
+                    'to' => $facilityRequest->email,
+                ]);
+
+                $emailSent = true;
+            } catch (\Throwable $e) {
+                Log::error('Failed to send facility request decision email.', [
+                    'facility_request_id' => $facilityRequest->id,
+                    'to' => $facilityRequest->email,
+                    'error' => $e->getMessage(),
+                ]);
+            }
+        }
+
+        $message = match (true) {
+            $emailSent => "{$facilityRequest->facility_name}'s request has been {$facilityRequest->status}. A notification email was sent to {$facilityRequest->email}.",
+            $decisionJustMade => "{$facilityRequest->facility_name}'s request has been {$facilityRequest->status}, but the notification email could not be sent.",
+            default => 'Request updated successfully.',
+        };
+
         return redirect()
             ->route('facility-requests.index')
-            ->with('status', 'Request updated successfully.');
+            ->with('status', $message);
     }
 
     /**
